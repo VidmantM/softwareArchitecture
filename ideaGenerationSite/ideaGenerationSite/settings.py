@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'taggit',
     'multiselectfield',
     'django_select2',
+    'django_filters',
 ]
 
 MIDDLEWARE = [

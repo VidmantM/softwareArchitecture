@@ -8,22 +8,25 @@ from django.views.generic import (
     DeleteView
 )
 import sys
+
+from django_filters.views import FilterView
+
 sys.path.append("..")
 from users.models import Project
+from .filters import ProjectFilter
+import django_filters
 
 def home(request):
-    context = {
-        'posts': Project.objects.all()
-    }
     return render(request, 'main/home.html')
 
 
-class ProjectListView(ListView):
+class ProjectListView(FilterView):
     model = Project
-    template_name = 'main/home.html'  # <app>/<model>_<viewtype>.html
+    template_name = 'main/home.html'
     context_object_name = 'posts'
     ordering = ['-date_posted']
     paginate_by = 5
+    filterset_class = ProjectFilter  # Add this line to specify the filter class to be used
 
 
 class ProjectDetailView(DetailView):

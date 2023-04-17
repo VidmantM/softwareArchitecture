@@ -1,8 +1,11 @@
 from django.db import models
 from django.contrib.auth.models import User
-from taggit.managers import TaggableManager
-from taggit.models import TagBase, GenericTaggedItemBase
-
+from django.db import models
+from django.utils import timezone
+from django.contrib.auth.models import User
+from django.urls import reverse
+import sys
+sys.path.append("..")
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -34,10 +37,14 @@ class Interest(models.Model):
 
 class Project(models.Model):
     # ID - Django by default creates it and assigns it as PK
+
     title = models.CharField(max_length=100, verbose_name='Title')
-#    description = models.TextField(blank=True, verbose_name='Description')
-#    created_at = models.DateTimeField(auto_now_add=True, verbose_name='Created at')        # To be set only 1 time
-#    edited_at = models.DateTimeField(auto_now=True, verbose_name='Edited at')             # Automatically updates on change
-#    skills = models.ManyToManyField('Skill')
+    description = models.TextField(blank=True, verbose_name='Description')
+    skills = models.ManyToManyField('Skill')
+    date_posted = models.DateTimeField(default=timezone.now)
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
     def __str__(self):
         return f'{self.title}'
+
+    def get_absolute_url(self):
+        return reverse('post-detail', kwargs={'pk': self.pk})

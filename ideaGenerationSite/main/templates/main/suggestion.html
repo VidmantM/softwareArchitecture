@@ -1,0 +1,33 @@
+{% extends "main/base.html" %}
+
+{% block content %}
+<br>
+<div class="col">
+    <div class="card card-body">
+        <form method="get">
+            {% csrf_token %}
+            {{ view.filterset.form }}  <!-- Render form fields as paragraphs -->
+            <button class="btn btn-primary" onclick="window.location.reload();" type="button">New Suggestion</button>
+        </form>
+    </div>
+</div>
+<br>
+
+{% if post %}
+    <article class="media content-section">
+        <div class="media-body">
+            <div class="article-metadata">
+                <a class="mr-2" href="#">{{ post.author }}</a>
+                {% for skill in post.skills.all %}
+                    <span class="badge badge-info">{{ skill }}</span>
+                {% endfor %}
+                <small class="text-muted">{{ post.date_posted|date:"F d, Y" }}</small>
+            </div>
+            <h2><a class="article-title" href="{% url 'post-detail' post.id %}">{{ post.title }}</a></h2>
+            <p class="article-content">{{ post.description }}</p>
+        </div>
+    </article>
+{% else %}
+    <p>No project available.</p>
+{% endif %}
+{% endblock content %}

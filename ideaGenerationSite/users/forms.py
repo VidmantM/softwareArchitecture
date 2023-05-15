@@ -4,6 +4,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.core.exceptions import ValidationError
 
 from .models import Profile, Skill, Interest, Project
+from .models import Weight
 
 
 class SignUpForm(UserCreationForm):
@@ -29,3 +30,11 @@ class ProfileEditForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = ['skills', 'interests', 'projects']
+
+
+class WeightFormulaForm(forms.Form):
+    weight_formula = forms.ModelChoiceField(
+        queryset=Weight.objects.all(),
+        empty_label=None,
+        widget=forms.RadioSelect
+    )

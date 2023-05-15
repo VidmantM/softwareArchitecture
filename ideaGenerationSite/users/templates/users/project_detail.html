@@ -13,6 +13,9 @@
           </div>
         {% endif %}
       </div>
+      {% for skill in object.skills.all %}
+        <span class="badge badge-info">{{ skill }}</span>
+      {% endfor %}
       <h2 class="article-title">{{ object.title }}</h2>
       <p class="article-content">{{ object.description }}</p>
     </div>

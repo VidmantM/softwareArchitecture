@@ -34,6 +34,13 @@ class Interest(models.Model):
     def __str__(self):
         return f'{self.name, self.expertise}'
 
+class Weight(models.Model):
+    # ID - Django by default creates it and assigns it as PK
+    purpose = models.CharField(max_length=30, unique=False, verbose_name="Name of the formula", default="name")
+    formula = models.CharField(max_length=100, unique=False, verbose_name="Mathematical weight formula", default="1")
+
+    def __str__(self):
+        return f'{self.purpose}'
 
 class Project(models.Model):
     # ID - Django by default creates it and assigns it as PK

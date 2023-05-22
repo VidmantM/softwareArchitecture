@@ -32,6 +32,7 @@ from .forms import WeightFormulaForm
 def home(request):
     return render(request, 'main/home.html')
 
+
 @login_required
 def liked_projects(request):
     user_profile = request.user.profile
@@ -50,6 +51,7 @@ def like_project(request, project_id):
     liked_projects = user_profile.liked_projects.all()
     context = {'liked_projects': liked_projects}
     return render(request, 'main/liked_projects.html', context)
+
 
 class ProjectListView(FilterView):
     model = Project
@@ -144,7 +146,6 @@ def skill_unmatch(request):
             non_matching_projects.append(project)
     return non_matching_projects
 
-
 @login_required
 def project_find(request):
     matching_projects = skill_match(request)
@@ -159,15 +160,19 @@ def project_find(request):
 
             # For matching
             for project, matching_skills_count in matching_projects:
+                popularity = project.likes
                 weight = round(eval(weight_formula) * random.uniform(1, 3), 2)
+                print("project=" + project.title + " weight=" + str(int(weight)))
                 project_weights.append((project, weight))
 
-            weighted_projects = [project for project, weight in project_weights]
-            weights = [weight for project, weight in project_weights]
+            # Filter out projects with weight equal to 0
+            filtered_project_weights = [(project, weight) for project, weight in project_weights if weight > 0]
+
+            weighted_projects = [project for project, weight in filtered_project_weights]
+            weights = [weight for project, weight in filtered_project_weights]
 
             filtered_weighted_projects = [p for p in weighted_projects if p.id not in unique_prev_recommendations]
-            filtered_weights = [w for p, w in zip(weighted_projects, weights) if
-                                p.id not in unique_prev_recommendations]
+            filtered_weights = [w for p, w in zip(weighted_projects, weights) if p.id not in unique_prev_recommendations]
 
             if len(filtered_weighted_projects) == 0:
                 request.session['prev_recommendations'] = []
@@ -196,11 +201,13 @@ def project_find(request):
 
     return render(request, 'main/project_find.html', context)
 
+
 @staff_member_required  # Ensures only staff members can access this view
 def project_approval(request):
     projects = Project.objects.filter(approved=False)  # Get unapproved projects
     context = {'projects': projects}
     return render(request, 'main/project_approval.html', context)
+
 
 @staff_member_required  # Ensures only staff members can access this view
 def approve_project(request, project_id):
@@ -208,6 +215,7 @@ def approve_project(request, project_id):
     project.approved = True
     project.save()
     return redirect('project_approval')
+
 
 @staff_member_required  # Ensures only staff members can access this view
 def deny_project(request, project_id):

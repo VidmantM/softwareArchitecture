@@ -12,6 +12,7 @@ class Profile(models.Model):
     skills = models.ManyToManyField('Skill', blank=True)
     interests = models.ManyToManyField('Interest', blank=True)
     projects = models.ManyToManyField('Project', blank=True)
+    liked_projects = models.ManyToManyField('Project', related_name='users_liked', blank=True)
 
     def __str__(self):
         return f'{self.user.username} Profile'
@@ -50,6 +51,9 @@ class Project(models.Model):
     skills = models.ManyToManyField('Skill')
     date_posted = models.DateTimeField(default=timezone.now)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
+    likes = models.PositiveIntegerField(default=0)
+    approved = models.BooleanField(default=False)  # New field for project approval
+
     def __str__(self):
         return f'{self.title}'
 

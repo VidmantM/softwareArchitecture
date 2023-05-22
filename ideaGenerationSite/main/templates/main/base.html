@@ -32,10 +32,14 @@
                 <a class="nav-item nav-link" href="{% url 'post-create' %}">Create Project</a>
                 <a class="nav-item nav-link" href="{% url 'profile' %}">Profile</a>
                 <a class="nav-item nav-link" href="{% url 'post-suggest' %}">Receive Suggestions</a>
+                <a class="nav-item nav-link" href="{% url 'liked-projects' %}">Liked Projects</a>
             </div>
             <!-- Navbar Right Side -->
             <div class="navbar-nav">
               {% if user.is_authenticated %}
+                                    {% if user.is_staff %}
+        <a class="nav-item nav-link" href="{% url 'project_approval' %}">Approval Page</a>
+    {% endif %}
                 <a class="nav-item nav-link" href="{% url 'logout' %}">Logout</a>
               {% else %}
                 <a class="nav-item nav-link" href="{% url 'login' %}">Login</a>

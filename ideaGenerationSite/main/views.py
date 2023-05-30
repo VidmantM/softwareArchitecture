@@ -9,7 +9,6 @@ from django.shortcuts import redirect, get_object_or_404
 from django.contrib.admin.views.decorators import staff_member_required
 
 from django.contrib.auth.decorators import login_required
-from django.http import request, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic import (
@@ -25,7 +24,6 @@ from users.models import Profile
 from users.models import Weight
 from users.models import Project
 from .filters import ProjectFilter
-import django_filters
 from .forms import WeightFormulaForm
 
 
